@@ -1,20 +1,19 @@
 package com.sulbaranjc.consumoapiandroid
 
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sulbaranjc.consumoapiandroid.databinding.ActivityMainBinding
 import com.sulbaranjc.consumoapiandroid.model.Cliente
-import com.sulbaranjc.consumoapiandroid.network.RetrofitClient
 import com.sulbaranjc.consumoapiandroid.ui.ClienteAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.sulbaranjc.consumoapiandroid.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,29 +23,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerItems.layoutManager = LinearLayoutManager(this)
 
-        cargarClientes()
-    }
+        viewModel.clientes.observe(this, Observer<List<Cliente>> { clientes ->
+            binding.recyclerItems.adapter = ClienteAdapter(clientes)
+        })
 
-    private fun cargarClientes() {
-        RetrofitClient.api.getClientes()
-            .enqueue(object : Callback<List<Cliente>> {
-
-                override fun onResponse(
-                    call: Call<List<Cliente>>,
-                    response: Response<List<Cliente>>
-                ) {
-                    if (response.isSuccessful) {
-                        val clientes = response.body() ?: emptyList()
-                        binding.recyclerItems.adapter =
-                            ClienteAdapter(clientes)
-                    } else {
-                        Log.e("API", "Error HTTP: ${response.code()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<List<Cliente>>, t: Throwable) {
-                    Log.e("API", "Error de red", t)
-                }
-            })
+        viewModel.cargarClientes()
     }
 }
