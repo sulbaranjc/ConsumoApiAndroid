@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/sulbaranjc/consumoapiandroid/network/ApiService.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/sulbaranjc/consumoapiandroid/network/ApiService.kt" />
+              <option name="updatedContent" value="package com.sulbaranjc.consumoapiandroid.network&#10;&#10;import com.sulbaranjc.consumoapiandroid.model.Cliente&#10;import retrofit2.Call&#10;import retrofit2.http.GET&#10;&#10;interface ApiService {&#10;&#10;    @GET(&quot;clientes/&quot;)&#10;    fun getClientes(): Call&lt;List&lt;Cliente&gt;&gt;&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
