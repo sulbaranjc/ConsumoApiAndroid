@@ -42,4 +42,10 @@ class MainActivity : AppCompatActivity() {
         // Cargar clientes desde la API
         viewModel.cargarClientes()
     }
+
+    override fun onResume() {
+        super.onResume()
+        // Recargar la lista de clientes cada vez que regresa a esta pantalla
+        viewModel.cargarClientes()
+    }
 }
