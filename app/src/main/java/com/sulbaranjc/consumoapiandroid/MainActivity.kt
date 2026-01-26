@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var adapter: ClienteAdapter
+    private var listaCompleta = listOf<Cliente>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,18 +36,26 @@ class MainActivity : AppCompatActivity() {
         // Configurar RecyclerView
         binding.recyclerItems.layoutManager = LinearLayoutManager(this)
 
+        // Inicializar adaptador vacío
+        adapter = ClienteAdapter(
+            emptyList(),
+            onEliminarClick = { cliente ->
+                mostrarDialogoEliminar(cliente)
+            },
+            onEditarClick = { cliente ->
+                abrirEditarCliente(cliente)
+            }
+        )
+        binding.recyclerItems.adapter = adapter
+
         // Observar cambios en la lista de clientes
         viewModel.clientes.observe(this, Observer<List<Cliente>> { clientes ->
-            binding.recyclerItems.adapter = ClienteAdapter(
-                clientes,
-                onEliminarClick = { cliente ->
-                    mostrarDialogoEliminar(cliente)
-                },
-                onEditarClick = { cliente ->
-                    abrirEditarCliente(cliente)
-                }
-            )
+            listaCompleta = clientes
+            adapter.actualizarLista(clientes)
         })
+
+        // Configurar SearchView
+        configurarBusqueda()
 
         // Configurar FAB para abrir pantalla de agregar cliente
         binding.fabAgregar.setOnClickListener {
@@ -55,6 +65,34 @@ class MainActivity : AppCompatActivity() {
 
         // Cargar clientes desde la API
         viewModel.cargarClientes()
+    }
+
+    private fun configurarBusqueda() {
+        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filtrarClientes(newText ?: "")
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+        })
+    }
+
+    private fun filtrarClientes(query: String) {
+        val listaFiltrada = if (query.isEmpty()) {
+            listaCompleta
+        } else {
+            listaCompleta.filter { cliente ->
+                cliente.nombre.contains(query, ignoreCase = true) ||
+                cliente.apellido.contains(query, ignoreCase = true) ||
+                cliente.email.contains(query, ignoreCase = true) ||
+                cliente.telefono.contains(query, ignoreCase = true) ||
+                cliente.direccion.contains(query, ignoreCase = true)
+            }
+        }
+        adapter.actualizarLista(listaFiltrada)
     }
 
     override fun onResume() {

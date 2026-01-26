@@ -7,7 +7,7 @@ import com.sulbaranjc.consumoapiandroid.databinding.ItemClienteBinding
 import com.sulbaranjc.consumoapiandroid.model.Cliente
 
 class ClienteAdapter(
-    private val clientes: List<Cliente>,
+    private var clientes: List<Cliente>,
     private val onEliminarClick: (Cliente) -> Unit,
     private val onEditarClick: (Cliente) -> Unit
 ) : RecyclerView.Adapter<ClienteAdapter.ViewHolder>() {
@@ -45,5 +45,11 @@ class ClienteAdapter(
     }
 
     override fun getItemCount(): Int = clientes.size
+
+    // Método para actualizar la lista
+    fun actualizarLista(nuevaLista: List<Cliente>) {
+        clientes = nuevaLista
+        notifyDataSetChanged()
+    }
 }
 
