@@ -29,7 +29,12 @@ class ClienteAdapter(
         holder.binding.txtNombre.text =
             "${cliente.nombre} ${cliente.apellido}"
 
-        holder.binding.txtEmail.text = cliente.email
+        holder.binding.txtTelefono.text = cliente.telefono
+
+        // El botón eliminar está visible pero sin funcionalidad por ahora
+        holder.binding.btnEliminar.setOnClickListener {
+            // Sin funcionalidad en esta instancia
+        }
     }
 
     override fun getItemCount(): Int = clientes.size

@@ -21,12 +21,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configurar toolbar
+        setSupportActionBar(binding.toolbar)
+
+        // Configurar RecyclerView
         binding.recyclerItems.layoutManager = LinearLayoutManager(this)
 
+        // Observar cambios en la lista de clientes
         viewModel.clientes.observe(this, Observer<List<Cliente>> { clientes ->
             binding.recyclerItems.adapter = ClienteAdapter(clientes)
         })
 
+        // Configurar FAB (sin funcionalidad por ahora)
+        binding.fabAgregar.setOnClickListener {
+            // Sin funcionalidad en esta instancia
+        }
+
+        // Cargar clientes desde la API
         viewModel.cargarClientes()
     }
 }
