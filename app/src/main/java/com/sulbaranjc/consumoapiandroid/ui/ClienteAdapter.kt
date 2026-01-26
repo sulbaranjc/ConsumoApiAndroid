@@ -7,7 +7,8 @@ import com.sulbaranjc.consumoapiandroid.databinding.ItemClienteBinding
 import com.sulbaranjc.consumoapiandroid.model.Cliente
 
 class ClienteAdapter(
-    private val clientes: List<Cliente>
+    private val clientes: List<Cliente>,
+    private val onEliminarClick: (Cliente) -> Unit
 ) : RecyclerView.Adapter<ClienteAdapter.ViewHolder>() {
 
     inner class ViewHolder(
@@ -31,9 +32,9 @@ class ClienteAdapter(
 
         holder.binding.txtTelefono.text = cliente.telefono
 
-        // El botón eliminar está visible pero sin funcionalidad por ahora
+        // Configurar click en botón eliminar
         holder.binding.btnEliminar.setOnClickListener {
-            // Sin funcionalidad en esta instancia
+            onEliminarClick(cliente)
         }
     }
 
