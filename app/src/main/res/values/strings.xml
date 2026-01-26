@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ConsumoApiAndroid</string>
+    <string name="agregar_cliente">Agregar cliente</string>
 </resources>

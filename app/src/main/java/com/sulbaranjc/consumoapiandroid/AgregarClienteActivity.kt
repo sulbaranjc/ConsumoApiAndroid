@@ -17,6 +17,13 @@ class AgregarClienteActivity : AppCompatActivity() {
     private var clienteId: Int = -1
     private var isEditMode: Boolean = false
 
+    // Variables para almacenar los datos originales del cliente
+    private var nombreOriginal: String = ""
+    private var apellidoOriginal: String = ""
+    private var emailOriginal: String = ""
+    private var telefonoOriginal: String = ""
+    private var direccionOriginal: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,12 +56,19 @@ class AgregarClienteActivity : AppCompatActivity() {
         binding.tvTitulo.text = "Editar"
         binding.btnGuardar.text = "Actualizar"
 
+        // Obtener datos del intent y almacenar como originales
+        nombreOriginal = intent.getStringExtra("CLIENTE_NOMBRE") ?: ""
+        apellidoOriginal = intent.getStringExtra("CLIENTE_APELLIDO") ?: ""
+        emailOriginal = intent.getStringExtra("CLIENTE_EMAIL") ?: ""
+        telefonoOriginal = intent.getStringExtra("CLIENTE_TELEFONO") ?: ""
+        direccionOriginal = intent.getStringExtra("CLIENTE_DIRECCION") ?: ""
+
         // Prellenar los campos con los datos del cliente
-        binding.etNombre.setText(intent.getStringExtra("CLIENTE_NOMBRE"))
-        binding.etApellido.setText(intent.getStringExtra("CLIENTE_APELLIDO"))
-        binding.etEmail.setText(intent.getStringExtra("CLIENTE_EMAIL"))
-        binding.etTelefono.setText(intent.getStringExtra("CLIENTE_TELEFONO"))
-        binding.etDireccion.setText(intent.getStringExtra("CLIENTE_DIRECCION"))
+        binding.etNombre.setText(nombreOriginal)
+        binding.etApellido.setText(apellidoOriginal)
+        binding.etEmail.setText(emailOriginal)
+        binding.etTelefono.setText(telefonoOriginal)
+        binding.etDireccion.setText(direccionOriginal)
     }
 
     private fun configurarModoCrear() {
@@ -98,6 +112,16 @@ class AgregarClienteActivity : AppCompatActivity() {
         if (direccion.isEmpty()) {
             binding.etDireccion.error = "La dirección es requerida"
             binding.etDireccion.requestFocus()
+            return
+        }
+
+        // Si estamos en modo edición, verificar si hay cambios
+        if (isEditMode && !hayChangios(nombre, apellido, email, telefono, direccion)) {
+            Toast.makeText(
+                this,
+                "No hay cambios para actualizar",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -192,6 +216,20 @@ class AgregarClienteActivity : AppCompatActivity() {
                 ).show()
             }
         })
+    }
+
+    private fun hayChangios(
+        nombre: String,
+        apellido: String,
+        email: String,
+        telefono: String,
+        direccion: String
+    ): Boolean {
+        return nombre != nombreOriginal ||
+               apellido != apellidoOriginal ||
+               email != emailOriginal ||
+               telefono != telefonoOriginal ||
+               direccion != direccionOriginal
     }
 }
 
