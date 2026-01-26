@@ -83,16 +83,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun filtrarClientes(query: String) {
-        filtroActual = query // ← NUEVO: Guardar el filtro actual
-        val listaFiltrada = if (query.isEmpty()) {
+        // Limpiar espacios en blanco antes y después
+        val queryLimpio = query.trim()
+        filtroActual = queryLimpio // ← Guardar el filtro limpio
+
+        val listaFiltrada = if (queryLimpio.isEmpty()) {
             listaCompleta
         } else {
             listaCompleta.filter { cliente ->
-                cliente.nombre.contains(query, ignoreCase = true) ||
-                cliente.apellido.contains(query, ignoreCase = true) ||
-                cliente.email.contains(query, ignoreCase = true) ||
-                cliente.telefono.contains(query, ignoreCase = true) ||
-                cliente.direccion.contains(query, ignoreCase = true)
+                cliente.nombre.contains(queryLimpio, ignoreCase = true) ||
+                cliente.apellido.contains(queryLimpio, ignoreCase = true) ||
+                cliente.email.contains(queryLimpio, ignoreCase = true) ||
+                cliente.telefono.contains(queryLimpio, ignoreCase = true) ||
+                cliente.direccion.contains(queryLimpio, ignoreCase = true)
             }
         }
         adapter.actualizarLista(listaFiltrada)
