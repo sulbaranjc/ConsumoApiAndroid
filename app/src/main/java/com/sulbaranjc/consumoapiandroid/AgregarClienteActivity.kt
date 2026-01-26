@@ -14,12 +14,24 @@ import retrofit2.Response
 class AgregarClienteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAgregarClienteBinding
+    private var clienteId: Int = -1
+    private var isEditMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAgregarClienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Detectar si estamos en modo edición
+        clienteId = intent.getIntExtra("CLIENTE_ID", -1)
+        isEditMode = clienteId != -1
+
+        if (isEditMode) {
+            configurarModoEditar()
+        } else {
+            configurarModoCrear()
+        }
 
         // Configurar botón volver
         binding.btnVolver.setOnClickListener {
@@ -30,6 +42,24 @@ class AgregarClienteActivity : AppCompatActivity() {
         binding.btnGuardar.setOnClickListener {
             guardarCliente()
         }
+    }
+
+    private fun configurarModoEditar() {
+        // Cambiar título y texto del botón
+        binding.tvTitulo.text = "Editar"
+        binding.btnGuardar.text = "Actualizar"
+
+        // Prellenar los campos con los datos del cliente
+        binding.etNombre.setText(intent.getStringExtra("CLIENTE_NOMBRE"))
+        binding.etApellido.setText(intent.getStringExtra("CLIENTE_APELLIDO"))
+        binding.etEmail.setText(intent.getStringExtra("CLIENTE_EMAIL"))
+        binding.etTelefono.setText(intent.getStringExtra("CLIENTE_TELEFONO"))
+        binding.etDireccion.setText(intent.getStringExtra("CLIENTE_DIRECCION"))
+    }
+
+    private fun configurarModoCrear() {
+        // Mantener título y botón por defecto
+        binding.btnGuardar.text = "Salvar"
     }
 
     private fun guardarCliente() {
@@ -82,8 +112,17 @@ class AgregarClienteActivity : AppCompatActivity() {
 
         // Deshabilitar botón mientras se guarda
         binding.btnGuardar.isEnabled = false
-        binding.btnGuardar.text = "Guardando..."
+        binding.btnGuardar.text = if (isEditMode) "Actualizando..." else "Guardando..."
 
+        // Decidir si crear o actualizar
+        if (isEditMode) {
+            actualizarCliente(clienteRequest)
+        } else {
+            crearCliente(clienteRequest)
+        }
+    }
+
+    private fun crearCliente(clienteRequest: ClienteRequest) {
         // Hacer la petición POST a la API
         RetrofitClient.api.crearCliente(clienteRequest).enqueue(object : Callback<Cliente> {
             override fun onResponse(call: Call<Cliente>, response: Response<Cliente>) {
@@ -93,15 +132,14 @@ class AgregarClienteActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     Toast.makeText(
                         this@AgregarClienteActivity,
-                        "Cliente guardado exitosamente",
+                        "Cliente creado exitosamente",
                         Toast.LENGTH_SHORT
                     ).show()
-                    // Volver a la pantalla anterior
                     finish()
                 } else {
                     Toast.makeText(
                         this@AgregarClienteActivity,
-                        "Error al guardar cliente: ${response.code()}",
+                        "Error al crear cliente: ${response.code()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -110,6 +148,42 @@ class AgregarClienteActivity : AppCompatActivity() {
             override fun onFailure(call: Call<Cliente>, t: Throwable) {
                 binding.btnGuardar.isEnabled = true
                 binding.btnGuardar.text = "Salvar"
+
+                Toast.makeText(
+                    this@AgregarClienteActivity,
+                    "Error de conexión: ${t.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    private fun actualizarCliente(clienteRequest: ClienteRequest) {
+        // Hacer la petición PUT a la API
+        RetrofitClient.api.actualizarCliente(clienteId, clienteRequest).enqueue(object : Callback<Cliente> {
+            override fun onResponse(call: Call<Cliente>, response: Response<Cliente>) {
+                binding.btnGuardar.isEnabled = true
+                binding.btnGuardar.text = "Actualizar"
+
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        this@AgregarClienteActivity,
+                        "Cliente actualizado exitosamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@AgregarClienteActivity,
+                        "Error al actualizar cliente: ${response.code()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Cliente>, t: Throwable) {
+                binding.btnGuardar.isEnabled = true
+                binding.btnGuardar.text = "Actualizar"
 
                 Toast.makeText(
                     this@AgregarClienteActivity,

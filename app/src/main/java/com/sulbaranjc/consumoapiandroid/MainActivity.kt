@@ -36,9 +36,15 @@ class MainActivity : AppCompatActivity() {
 
         // Observar cambios en la lista de clientes
         viewModel.clientes.observe(this, Observer<List<Cliente>> { clientes ->
-            binding.recyclerItems.adapter = ClienteAdapter(clientes) { cliente ->
-                mostrarDialogoEliminar(cliente)
-            }
+            binding.recyclerItems.adapter = ClienteAdapter(
+                clientes,
+                onEliminarClick = { cliente ->
+                    mostrarDialogoEliminar(cliente)
+                },
+                onEditarClick = { cliente ->
+                    abrirEditarCliente(cliente)
+                }
+            )
         })
 
         // Configurar FAB para abrir pantalla de agregar cliente
@@ -55,6 +61,18 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         // Recargar la lista de clientes cada vez que regresa a esta pantalla
         viewModel.cargarClientes()
+    }
+
+    private fun abrirEditarCliente(cliente: Cliente) {
+        val intent = Intent(this, AgregarClienteActivity::class.java).apply {
+            putExtra("CLIENTE_ID", cliente.id)
+            putExtra("CLIENTE_NOMBRE", cliente.nombre)
+            putExtra("CLIENTE_APELLIDO", cliente.apellido)
+            putExtra("CLIENTE_EMAIL", cliente.email)
+            putExtra("CLIENTE_TELEFONO", cliente.telefono)
+            putExtra("CLIENTE_DIRECCION", cliente.direccion)
+        }
+        startActivity(intent)
     }
 
     private fun mostrarDialogoEliminar(cliente: Cliente) {

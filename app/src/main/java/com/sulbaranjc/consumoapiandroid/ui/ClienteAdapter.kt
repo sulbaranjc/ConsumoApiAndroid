@@ -8,7 +8,8 @@ import com.sulbaranjc.consumoapiandroid.model.Cliente
 
 class ClienteAdapter(
     private val clientes: List<Cliente>,
-    private val onEliminarClick: (Cliente) -> Unit
+    private val onEliminarClick: (Cliente) -> Unit,
+    private val onEditarClick: (Cliente) -> Unit
 ) : RecyclerView.Adapter<ClienteAdapter.ViewHolder>() {
 
     inner class ViewHolder(
@@ -35,6 +36,11 @@ class ClienteAdapter(
         // Configurar click en botón eliminar
         holder.binding.btnEliminar.setOnClickListener {
             onEliminarClick(cliente)
+        }
+
+        // Configurar click en la tarjeta completa para editar
+        holder.binding.root.setOnClickListener {
+            onEditarClick(cliente)
         }
     }
 
