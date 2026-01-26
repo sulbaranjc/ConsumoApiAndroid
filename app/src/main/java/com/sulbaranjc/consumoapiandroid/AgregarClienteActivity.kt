@@ -7,6 +7,7 @@ import com.sulbaranjc.consumoapiandroid.databinding.ActivityAgregarClienteBindin
 import com.sulbaranjc.consumoapiandroid.model.Cliente
 import com.sulbaranjc.consumoapiandroid.network.ClienteRequest
 import com.sulbaranjc.consumoapiandroid.network.RetrofitClient
+import com.sulbaranjc.consumoapiandroid.utils.ClienteValidator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,8 +22,8 @@ class AgregarClienteActivity : AppCompatActivity() {
     private var nombreOriginal: String = ""
     private var apellidoOriginal: String = ""
     private var emailOriginal: String = ""
-    private var telefonoOriginal: String = ""
-    private var direccionOriginal: String = ""
+    private var telefonoOriginal: String? = null  // Opcional
+    private var direccionOriginal: String? = null // Opcional
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,15 +61,15 @@ class AgregarClienteActivity : AppCompatActivity() {
         nombreOriginal = intent.getStringExtra("CLIENTE_NOMBRE") ?: ""
         apellidoOriginal = intent.getStringExtra("CLIENTE_APELLIDO") ?: ""
         emailOriginal = intent.getStringExtra("CLIENTE_EMAIL") ?: ""
-        telefonoOriginal = intent.getStringExtra("CLIENTE_TELEFONO") ?: ""
-        direccionOriginal = intent.getStringExtra("CLIENTE_DIRECCION") ?: ""
+        telefonoOriginal = intent.getStringExtra("CLIENTE_TELEFONO")
+        direccionOriginal = intent.getStringExtra("CLIENTE_DIRECCION")
 
         // Prellenar los campos con los datos del cliente
         binding.etNombre.setText(nombreOriginal)
         binding.etApellido.setText(apellidoOriginal)
         binding.etEmail.setText(emailOriginal)
-        binding.etTelefono.setText(telefonoOriginal)
-        binding.etDireccion.setText(direccionOriginal)
+        binding.etTelefono.setText(telefonoOriginal ?: "")
+        binding.etDireccion.setText(direccionOriginal ?: "")
     }
 
     private fun configurarModoCrear() {
@@ -81,54 +82,71 @@ class AgregarClienteActivity : AppCompatActivity() {
         val nombre = binding.etNombre.text.toString().trim()
         val apellido = binding.etApellido.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
-        val telefono = binding.etTelefono.text.toString().trim()
-        val direccion = binding.etDireccion.text.toString().trim()
+        val telefono = binding.etTelefono.text.toString()
+        val direccion = binding.etDireccion.text.toString()
 
-        // Validar que los campos no estén vacíos
-        if (nombre.isEmpty()) {
-            binding.etNombre.error = "El nombre es requerido"
+        // Limpiar errores previos
+        binding.etNombre.error = null
+        binding.etApellido.error = null
+        binding.etEmail.error = null
+        binding.etTelefono.error = null
+        binding.etDireccion.error = null
+
+        // Validar campos obligatorios según contrato técnico
+        val nombreResult = ClienteValidator.validateNombre(nombre)
+        if (!nombreResult.isValid) {
+            binding.etNombre.error = nombreResult.errorMessage
             binding.etNombre.requestFocus()
             return
         }
 
-        if (apellido.isEmpty()) {
-            binding.etApellido.error = "El apellido es requerido"
+        val apellidoResult = ClienteValidator.validateApellido(apellido)
+        if (!apellidoResult.isValid) {
+            binding.etApellido.error = apellidoResult.errorMessage
             binding.etApellido.requestFocus()
             return
         }
 
-        if (email.isEmpty()) {
-            binding.etEmail.error = "El email es requerido"
+        val emailResult = ClienteValidator.validateEmail(email)
+        if (!emailResult.isValid) {
+            binding.etEmail.error = emailResult.errorMessage
             binding.etEmail.requestFocus()
             return
         }
 
-        if (telefono.isEmpty()) {
-            binding.etTelefono.error = "El teléfono es requerido"
+        // Validar campos opcionales si tienen contenido
+        val telefonoResult = ClienteValidator.validateTelefono(telefono)
+        if (!telefonoResult.isValid) {
+            binding.etTelefono.error = telefonoResult.errorMessage
             binding.etTelefono.requestFocus()
             return
         }
 
-        if (direccion.isEmpty()) {
-            binding.etDireccion.error = "La dirección es requerida"
+        val direccionResult = ClienteValidator.validateDireccion(direccion)
+        if (!direccionResult.isValid) {
+            binding.etDireccion.error = direccionResult.errorMessage
             binding.etDireccion.requestFocus()
             return
         }
 
+        // Convertir campos opcionales vacíos a null según contrato
+        val telefonoFinal = ClienteValidator.stringToNullIfEmpty(telefono)
+        val direccionFinal = ClienteValidator.stringToNullIfEmpty(direccion)
+
         // Si estamos en modo edición, verificar si hay cambios
-        if (isEditMode && !hayChangios(nombre, apellido, email, telefono, direccion)) {
+        if (isEditMode && !hayChangios(nombre, apellido, email, telefonoFinal, direccionFinal)) {
             // No hay cambios, simular actualización exitosa y regresar
             finish()
             return
         }
 
-        // Crear objeto ClienteRequest (sin ID)
+        // Crear objeto ClienteRequest según nuevo contrato
         val clienteRequest = ClienteRequest(
             nombre = nombre,
             apellido = apellido,
             email = email,
-            telefono = telefono,
-            direccion = direccion
+            telefono = telefonoFinal,
+            direccion = direccionFinal
         )
 
         // Deshabilitar botón mientras se guarda
@@ -158,9 +176,16 @@ class AgregarClienteActivity : AppCompatActivity() {
                     ).show()
                     finish()
                 } else {
+                    // Manejar error 422 según contrato técnico
+                    val errorMessage = if (response.code() == 422) {
+                        "Datos inválidos. Revisa los campos marcados."
+                    } else {
+                        "Error al crear cliente: ${response.code()}"
+                    }
+
                     Toast.makeText(
                         this@AgregarClienteActivity,
-                        "Error al crear cliente: ${response.code()}",
+                        errorMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -194,9 +219,16 @@ class AgregarClienteActivity : AppCompatActivity() {
                     ).show()
                     finish()
                 } else {
+                    // Manejar error 422 según contrato técnico
+                    val errorMessage = if (response.code() == 422) {
+                        "Datos inválidos. Revisa los campos marcados."
+                    } else {
+                        "Error al actualizar cliente: ${response.code()}"
+                    }
+
                     Toast.makeText(
                         this@AgregarClienteActivity,
-                        "Error al actualizar cliente: ${response.code()}",
+                        errorMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -219,8 +251,8 @@ class AgregarClienteActivity : AppCompatActivity() {
         nombre: String,
         apellido: String,
         email: String,
-        telefono: String,
-        direccion: String
+        telefono: String?,
+        direccion: String?
     ): Boolean {
         return nombre != nombreOriginal ||
                apellido != apellidoOriginal ||

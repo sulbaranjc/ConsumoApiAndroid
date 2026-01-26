@@ -119,7 +119,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Teléfono"
+                android:hint="Teléfono (opcional)"
                 app:hintTextColor="#E91E63"
                 app:boxStrokeColor="#E91E63"
                 app:boxStrokeWidth="2dp"
@@ -140,7 +140,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Dirección"
+                android:hint="Dirección (opcional)"
                 app:hintTextColor="#E91E63"
                 app:boxStrokeColor="#E91E63"
                 app:boxStrokeWidth="2dp"

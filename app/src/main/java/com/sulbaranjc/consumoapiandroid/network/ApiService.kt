@@ -25,11 +25,12 @@ interface ApiService {
 }
 
 // Data class para enviar datos sin el ID (el servidor lo genera)
+// Actualizada según nuevo contrato técnico: telefono y direccion opcionales
 data class ClienteRequest(
-    val nombre: String,
-    val apellido: String,
-    val email: String,
-    val telefono: String,
-    val direccion: String
+    val nombre: String,        // OBLIGATORIO - 2-50 chars, solo letras y espacios
+    val apellido: String,      // OBLIGATORIO - 2-50 chars, solo letras y espacios
+    val email: String,         // OBLIGATORIO - formato email válido
+    val telefono: String?,     // OPCIONAL - 7-15 dígitos con formato +?dígitos
+    val direccion: String?     // OPCIONAL - máximo 200 caracteres
 )
 
