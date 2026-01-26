@@ -117,11 +117,8 @@ class AgregarClienteActivity : AppCompatActivity() {
 
         // Si estamos en modo edición, verificar si hay cambios
         if (isEditMode && !hayChangios(nombre, apellido, email, telefono, direccion)) {
-            Toast.makeText(
-                this,
-                "No hay cambios para actualizar",
-                Toast.LENGTH_SHORT
-            ).show()
+            // No hay cambios, simular actualización exitosa y regresar
+            finish()
             return
         }
 
