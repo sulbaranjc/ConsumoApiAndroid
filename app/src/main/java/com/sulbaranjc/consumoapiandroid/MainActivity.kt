@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var adapter: ClienteAdapter
     private var listaCompleta = listOf<Cliente>()
+    private var filtroActual = "" // ← NUEVO: Guardar el filtro actual
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,8 @@ class MainActivity : AppCompatActivity() {
         // Observar cambios en la lista de clientes
         viewModel.clientes.observe(this, Observer<List<Cliente>> { clientes ->
             listaCompleta = clientes
-            adapter.actualizarLista(clientes)
+            // Reaplicar el filtro actual (si existe)
+            filtrarClientes(filtroActual)
         })
 
         // Configurar SearchView
@@ -81,6 +83,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun filtrarClientes(query: String) {
+        filtroActual = query // ← NUEVO: Guardar el filtro actual
         val listaFiltrada = if (query.isEmpty()) {
             listaCompleta
         } else {
