@@ -1,5 +1,6 @@
 package com.sulbaranjc.consumoapiandroid
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -32,9 +33,10 @@ class MainActivity : AppCompatActivity() {
             binding.recyclerItems.adapter = ClienteAdapter(clientes)
         })
 
-        // Configurar FAB (sin funcionalidad por ahora)
+        // Configurar FAB para abrir pantalla de agregar cliente
         binding.fabAgregar.setOnClickListener {
-            // Sin funcionalidad en esta instancia
+            val intent = Intent(this, AgregarClienteActivity::class.java)
+            startActivity(intent)
         }
 
         // Cargar clientes desde la API
