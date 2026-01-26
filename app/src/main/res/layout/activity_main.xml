@@ -19,6 +19,27 @@
             app:titleTextColor="#E91E63"
             app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
+        <!-- Barra de búsqueda con Material Design -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@android:color/transparent"
+                android:iconifiedByDefault="false"
+                app:queryHint="Buscar clientes..."
+                app:searchIcon="@android:drawable/ic_menu_search"
+                app:closeIcon="@android:drawable/ic_menu_close_clear_cancel" />
+
+        </com.google.android.material.card.MaterialCardView>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
