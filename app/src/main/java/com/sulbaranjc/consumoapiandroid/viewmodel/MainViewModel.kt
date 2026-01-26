@@ -15,7 +15,12 @@ class MainViewModel : ViewModel() {
     private val _clientes = MutableLiveData<List<Cliente>>()
     val clientes: LiveData<List<Cliente>> = _clientes
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun cargarClientes() {
+        _isLoading.value = true
+
         RetrofitClient.api.getClientes()
             .enqueue(object : Callback<List<Cliente>> {
 
@@ -23,6 +28,7 @@ class MainViewModel : ViewModel() {
                     call: Call<List<Cliente>>,
                     response: Response<List<Cliente>>
                 ) {
+                    _isLoading.value = false
                     if (response.isSuccessful) {
                         _clientes.value = response.body() ?: emptyList()
                     } else {
@@ -31,6 +37,7 @@ class MainViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<List<Cliente>>, t: Throwable) {
+                    _isLoading.value = false
                     Log.e("API", "Error de red", t)
                 }
             })

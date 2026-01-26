@@ -56,6 +56,16 @@ class MainActivity : AppCompatActivity() {
             filtrarClientes(filtroActual)
         })
 
+        // Observar estado de carga para el SwipeRefreshLayout
+        viewModel.isLoading.observe(this, Observer { isLoading ->
+            binding.swipeRefresh.isRefreshing = isLoading
+        })
+
+        // Configurar Pull-to-Refresh
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.cargarClientes()
+        }
+
         // Configurar SearchView
         configurarBusqueda()
 
