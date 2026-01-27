@@ -64,11 +64,12 @@
         android:id="@+id/fabAgregar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="50dp"
         android:contentDescription="@string/agregar_cliente"
         app:srcCompat="@android:drawable/ic_input_add"
         app:backgroundTint="#E91E63"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        app:elevation="8dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
