@@ -31,7 +31,7 @@ class ClienteAdapter(
         holder.binding.txtNombre.text =
             "${cliente.nombre} ${cliente.apellido}"
 
-        holder.binding.txtTelefono.text = cliente.telefono
+        holder.binding.txtTelefono.text = cliente.telefono ?: "Sin teléfono"
 
         // Configurar click en botón eliminar
         holder.binding.btnEliminar.setOnClickListener {

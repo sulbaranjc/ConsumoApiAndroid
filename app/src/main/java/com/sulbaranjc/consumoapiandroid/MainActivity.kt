@@ -104,8 +104,8 @@ class MainActivity : AppCompatActivity() {
                 cliente.nombre.contains(queryLimpio, ignoreCase = true) ||
                 cliente.apellido.contains(queryLimpio, ignoreCase = true) ||
                 cliente.email.contains(queryLimpio, ignoreCase = true) ||
-                cliente.telefono.contains(queryLimpio, ignoreCase = true) ||
-                cliente.direccion.contains(queryLimpio, ignoreCase = true)
+                cliente.telefono?.contains(queryLimpio, ignoreCase = true) == true ||
+                cliente.direccion?.contains(queryLimpio, ignoreCase = true) == true
             }
         }
         adapter.actualizarLista(listaFiltrada)
@@ -123,8 +123,8 @@ class MainActivity : AppCompatActivity() {
             putExtra("CLIENTE_NOMBRE", cliente.nombre)
             putExtra("CLIENTE_APELLIDO", cliente.apellido)
             putExtra("CLIENTE_EMAIL", cliente.email)
-            putExtra("CLIENTE_TELEFONO", cliente.telefono)
-            putExtra("CLIENTE_DIRECCION", cliente.direccion)
+            putExtra("CLIENTE_TELEFONO", cliente.telefono ?: "")
+            putExtra("CLIENTE_DIRECCION", cliente.direccion ?: "")
         }
         startActivity(intent)
     }
