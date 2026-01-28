@@ -58,8 +58,6 @@ dependencies {
     // OkHttp para logging (opcional pero recomendado)
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    // Coroutines para llamadas asíncronas
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
