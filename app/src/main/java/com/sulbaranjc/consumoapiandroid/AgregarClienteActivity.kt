@@ -61,8 +61,13 @@ class AgregarClienteActivity : AppCompatActivity() {
         nombreOriginal = intent.getStringExtra("CLIENTE_NOMBRE") ?: ""
         apellidoOriginal = intent.getStringExtra("CLIENTE_APELLIDO") ?: ""
         emailOriginal = intent.getStringExtra("CLIENTE_EMAIL") ?: ""
-        telefonoOriginal = intent.getStringExtra("CLIENTE_TELEFONO")
-        direccionOriginal = intent.getStringExtra("CLIENTE_DIRECCION")
+
+        // Convertir strings vacíos a null para comparación correcta
+        val telefonoIntent = intent.getStringExtra("CLIENTE_TELEFONO") ?: ""
+        val direccionIntent = intent.getStringExtra("CLIENTE_DIRECCION") ?: ""
+
+        telefonoOriginal = if (telefonoIntent.isBlank()) null else telefonoIntent
+        direccionOriginal = if (direccionIntent.isBlank()) null else direccionIntent
 
         // Prellenar los campos con los datos del cliente
         binding.etNombre.setText(nombreOriginal)
