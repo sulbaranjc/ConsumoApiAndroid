@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">ConsumoApiAndroid</string>
     <string name="agregar_cliente">Agregar cliente</string>
+    <string name="volver">Volver</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellido">Apellido</string>
+    <string name="email">Email</string>
+    <string name="telefono_opcional">Teléfono (opcional)</string>
+    <string name="direccion_opcional">Dirección (opcional)</string>
+    <string name="salvar">Salvar</string>
+    <string name="formulario_cliente">Formulario Cliente</string>
 </resources>

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="Lista"
-            app:titleTextColor="#E91E63"
+            app:titleTextColor="#03A9F4"
             app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
         <!-- Barra de búsqueda con Material Design -->
@@ -68,7 +68,7 @@
         android:layout_margin="50dp"
         android:contentDescription="@string/agregar_cliente"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="#E91E63"
+        app:backgroundTint="#03A9F4"
         app:tint="@android:color/white"
         app:elevation="8dp" />
 

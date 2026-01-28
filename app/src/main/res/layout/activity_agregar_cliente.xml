@@ -1,50 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Header con fondo azul y ícono -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:elevation="0dp">
+        android:layout_height="220dp"
+        android:background="@drawable/header_background">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+        <!-- Botón Volver -->
+        <ImageButton
+            android:id="@+id/btnVolver"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            android:contentDescription="@string/volver"
+            app:tint="#FFFFFF" />
 
-            <ImageButton
-                android:id="@+id/btnVolver"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_revert"
-                android:contentDescription="Volver"
-                app:tint="#E91E63" />
+        <!-- Ícono de usuario en círculo blanco -->
+        <FrameLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/circle_background"
+            android:elevation="4dp">
 
-            <TextView
-                android:id="@+id/tvTitulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Adicionar"
-                android:textColor="#E91E63"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_user_header"
+                android:contentDescription="@string/formulario_cliente"
+                app:tint="#03A9F4" />
 
-        </com.google.android.material.appbar.MaterialToolbar>
+        </FrameLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:text="@string/formulario_cliente"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
+    </RelativeLayout>
+
+    <!-- ScrollView con formulario -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,11 +74,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nombre"
-                app:hintTextColor="#E91E63"
-                app:boxStrokeColor="#E91E63"
+                android:hint="@string/nombre"
+                app:hintTextColor="#03A9F4"
+                app:boxStrokeColor="#03A9F4"
                 app:boxStrokeWidth="2dp"
-                app:boxBackgroundMode="none"
+                app:boxBackgroundMode="outline"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="#03A9F4"
                 android:layout_marginBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -77,11 +97,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Apellido"
-                app:hintTextColor="#E91E63"
-                app:boxStrokeColor="#E91E63"
+                android:hint="@string/apellido"
+                app:hintTextColor="#03A9F4"
+                app:boxStrokeColor="#03A9F4"
                 app:boxStrokeWidth="2dp"
-                app:boxBackgroundMode="none"
+                app:boxBackgroundMode="outline"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="#03A9F4"
                 android:layout_marginBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -98,11 +120,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                app:hintTextColor="#E91E63"
-                app:boxStrokeColor="#E91E63"
+                android:hint="@string/email"
+                app:hintTextColor="#03A9F4"
+                app:boxStrokeColor="#03A9F4"
                 app:boxStrokeWidth="2dp"
-                app:boxBackgroundMode="none"
+                app:boxBackgroundMode="outline"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="#03A9F4"
                 android:layout_marginBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -119,11 +143,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Teléfono (opcional)"
-                app:hintTextColor="#E91E63"
-                app:boxStrokeColor="#E91E63"
+                android:hint="@string/telefono_opcional"
+                app:hintTextColor="#03A9F4"
+                app:boxStrokeColor="#03A9F4"
                 app:boxStrokeWidth="2dp"
-                app:boxBackgroundMode="none"
+                app:boxBackgroundMode="outline"
+                app:startIconDrawable="@drawable/ic_phone"
+                app:startIconTint="#03A9F4"
                 android:layout_marginBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -140,11 +166,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Dirección (opcional)"
-                app:hintTextColor="#E91E63"
-                app:boxStrokeColor="#E91E63"
+                android:hint="@string/direccion_opcional"
+                app:hintTextColor="#03A9F4"
+                app:boxStrokeColor="#03A9F4"
                 app:boxStrokeWidth="2dp"
-                app:boxBackgroundMode="none"
+                app:boxBackgroundMode="outline"
+                app:startIconDrawable="@drawable/ic_location"
+                app:startIconTint="#03A9F4"
                 android:layout_marginBottom="32dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -163,19 +191,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Salvar"
+                android:text="@string/salvar"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textAllCaps="false"
                 android:paddingStart="48dp"
                 android:paddingEnd="48dp"
                 app:cornerRadius="30dp"
-                app:backgroundTint="#E91E63"
+                app:backgroundTint="#03A9F4"
                 android:elevation="4dp" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+</LinearLayout>
